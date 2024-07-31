@@ -1,4 +1,55 @@
-%%[
+
+2.  
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Get Access Token</title>
+</head>
+<body>
+    %%[
+        VAR @APIEndpoint, @ClientID, @ClientSecret, @Username, @Password, @SecurityToken, @AccessToken, @Response, @ResponseStatus, @ResponseHeader, @ResponseContent, @Payload
+
+        /* Salesforce API Credentials */
+        SET @APIEndpoint = "https://login.salesforce.com/services/oauth2/token"
+        SET @ClientID = "YOUR_CLIENT_ID"
+        SET @ClientSecret = "YOUR_CLIENT_SECRET"
+        SET @Username = "YOUR_SALESFORCE_USERNAME"
+        SET @Password = "YOUR_SALESFORCE_PASSWORD"
+        SET @SecurityToken = "YOUR_SALESFORCE_SECURITY_TOKEN"
+
+        /* Function to Get Access Token Using Username-Password */
+        SET @Payload = CONCAT("grant_type=password&client_id=", @ClientID, "&client_secret=", @ClientSecret, "&username=", @Username, "&password=", @Password, @SecurityToken)
+        
+        /* Debugging: Output the endpoint and payload */
+        Output(Concat("<br>API Endpoint: ", @APIEndpoint))
+        Output(Concat("<br>Payload: ", @Payload))
+        
+        SET @Response = HTTPPost2(@APIEndpoint, "application/x-www-form-urlencoded", @Payload, False, @ResponseStatus, @ResponseHeader, @ResponseContent)
+
+        /* Debugging: Output the response */
+        Output(Concat("<br>Response Status: ", @ResponseStatus))
+        Output(Concat("<br>Response Content: ", @ResponseContent))
+    ]%%
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1.%%[
     VAR @APIEndpoint, @ClientID, @ClientSecret, @AccessToken, @Response, @ResponseStatus, @ResponseHeader, @ResponseContent
 
     /* Salesforce API Credentials */
