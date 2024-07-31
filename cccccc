@@ -1,1 +1,23 @@
+%%[
+    VAR @APIEndpoint, @ClientID, @ClientSecret, @AccessToken, @Response, @ResponseStatus, @ResponseHeader, @ResponseContent
+
+    /* Salesforce API Credentials */
+    SET @APIEndpoint = "https://login.salesforce.com/services/oauth2/token"
+    SET @ClientID = "YOUR_CLIENT_ID"
+    SET @ClientSecret = "YOUR_CLIENT_SECRET"
+
+    /* Function to Get Access Token Using Client Credentials */
+    SET @Payload = CONCAT("grant_type=client_credentials&client_id=", @ClientID, "&client_secret=", @ClientSecret)
+    SET @Response = HTTPPost2(@APIEndpoint, "application/x-www-form-urlencoded", @Payload, False, @ResponseStatus, @ResponseHeader, @ResponseContent)
+    SET @ResponseJSON = TreatAsContent(@ResponseContent, "application/json")
+    SET @AccessToken = TrimField(ExtractValue(@ResponseJSON, "access_token"))
+
+    /* Debugging */
+    Output(Concat("<br>Response Status: ", @ResponseStatus))
+    Output(Concat("<br>Response Content: ", @ResponseContent))
+    Output(Concat("<br>Access Token: ", @AccessToken))
+
+    /* Store Access Token Securely */
+    UpsertDE("TokensDataExtension", 1, "Key", "Salesforce", "AccessToken", @AccessToken)
+]%%
 
