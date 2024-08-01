@@ -1,7 +1,55 @@
+4.
+<script runat="server">
+Platform.Load("Core", "1.1.1");
+
+var clientId = "YOUR_CONSUMER_KEY";
+var clientSecret = "YOUR_CONSUMER_SECRET";
+var authUrl = "https://login.salesforce.com/services/oauth2/token";
+
+var payload = "grant_type=client_credentials" +
+              "&client_id=" + clientId +
+              "&client_secret=" + clientSecret;
+
+var req = new Script.Util.HttpRequest(authUrl);
+req.method = "POST";
+req.contentType = "application/x-www-form-urlencoded";
+req.postData = payload;
+
+try {
+    var resp = req.send();
+    if (resp.statusCode == 200) {
+        var result = Platform.Function.ParseJSON(resp.content);
+        var accessToken = result.access_token;
+        Write("Access Token: " + accessToken);
+    } else {
+        Write("Error: " + resp.statusCode + " - " + resp.content);
+    }
+} catch (e) {
+    Write("Exception: " + e.message);
+}
+</script>
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+===================================================================================================================
 3.If you want to obtain the access token using only the client ID and client secret, you should use the OAuth 2.0 Client Credentials Grant flow. However, Salesforce generally doesn't support the Client Credentials Grant directly for obtaining access tokens for standard API calls.
 
 The recommended approach without using username-password credentials is to use the JWT Bearer Token flow. Here is how you can do it:
