@@ -9,3 +9,49 @@ try {
 } catch (e) {
   Write("Error parsing JSON: " + e.message);
 }
+
+script time out
+try {
+    // Assume this is part 1 of the script
+    var response = HTTP.Get(dunsapiurl1, headerNames, headerValues);
+
+    if (response.StatusCode == 200) {
+        var responseparsed = Platform.Function.ParseJSON(response.Content);
+
+        // Minimal processing in this execution
+        var industrycode = responseparsed.organization.industryCodes[0].code;
+        // Save the industry code and any other essential info to a data extension or log
+
+        // If you have more processing, consider scheduling it as a separate script or execution
+    } else {
+        Write("Error: API call failed with status code " + response.StatusCode);
+    }
+} catch (e) {
+    Write("Error: " + e.message);
+}
+
+
+memory
+try {
+    var response = HTTP.Get(dunsapiurl1, headerNames, headerValues);
+
+    if (response.StatusCode == 200) {
+        var responseContent = response.Content;
+
+        // Parse only necessary parts of the JSON
+        var responseparsed = Platform.Function.ParseJSON(responseContent);
+
+        var industrycode = responseparsed.organization.industryCodes[0].code;
+
+        // Free memory by setting large variables to null after processing
+        responseContent = null;
+        responseparsed = null;
+
+        // More processing here...
+    } else {
+        Write("Error: API call failed with status code " + response.StatusCode);
+    }
+} catch (e) {
+    Write("Error: " + e.message);
+}
+
